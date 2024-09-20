@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SacrisPeur Resources Hub</title>
+    <style>
+        :root {
+            --primary-color: #16423C;
+            --secondary-color: #2ecc71;
+            --text-color: #333;
+            --bg-color: #C4DAD2;
+            --section-bg: white;
+        }
+        [data-theme="dark"] {
+            --primary-color: #58a6ff;
+            --secondary-color: #FABC3F;
+            --text-color: #f0f0f0;
+            --bg-color: #1a1a1a;
+            --section-bg: #E85C0D;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            https://drive.google.com/file/d/1BfcMsVXlJ2KCkv4KvFw65p1IInrUTDuV/view?usp=sharing
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        header {
+            background: linear-gradient(45deg, #3498db, #2ecc71, #e74c3c, #f39c12);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            position: relative;
+        }
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 2rem;
+            flex-grow: 1;
+        }
+        .section {
+            background-color: var(--section-bg);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem;
+            width: calc(50% - 2rem);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, background-color 0.3s;
+        }
+        .section:hover {
+            transform: scale(1.05);
+        }
+        h2 {
+            color: var(--primary-color);
+        }
+        button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #27ae60;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content {
+            background-color: var(--section-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 80%;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: var(--text-color);
+        }
+        .resource-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .resource-list button {
+            width: 100%;
+            text-align: left;
+            padding: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .resource-list button:hover {
+            background-color: #2980b9;
+        }
+        footer {
+            background: linear-gradient(45deg, #3498db, #2ecc71, #e74c3c, #f39c12);
+            color: white;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .footer-left {
+            flex: 1;
+            min-width: 200px;
+        }
+        .footer-right {
+            flex: 1;
+            min-width: 200px;
+            text-align: right;
+        }
+        .footer-brand {
+            font-family: 'Arial Black', sans-serif;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .footer-slogan {
+            font-style: italic;
+        }
+        .social-icons a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1rem;
+            font-size: 1.2rem;
+        }
+        .moving-text {
+            background-color: #34495e;
+            color: white;
+            padding: 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        .moving-text p {
+            display: inline-block;
+            padding-left: 100%;
+            animation: move 20s linear infinite;
+        }
+        @keyframes move {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(-100%, 0);
+            }
+        }
+        .theme-switch-wrapper {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .theme-switch {
+            display: inline-block;
+            height: 34px;
+            position: relative;
+            width: 60px;
+        }
+        .theme-switch input {
+            display: none;
+        }
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            background-color: #fff;
+            bottom: 4px;
+            content: "";
+            height: 26px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 26px;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        .slider-icon {
+            color: #f39c12;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+            transition: opacity 0.3s ease;
+        }
+        .slider-icon.sun {
+            left: 10px;
+        }
+        .slider-icon.moon {
+            right: 10px;
+            opacity: 0;
+        }
+        input:checked + .slider .sun {
+            opacity: 0;
+        }
+        input:checked + .slider .moon {
+            opacity: 1;
+        }
+        /* New styles for search and favorites */
+        .search-container {
+            margin-bottom: 1rem;
+        }
+        .search-container input {
+            padding: 0.5rem;
+            width: 100%;
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+        }
+        .favorite-btn {
+            background-color: transparent;
+            border: none;
+            color: gold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .favorite-btn:hover {
+            transform: scale(1.2);
+        }
+        /* Media query for mobile responsiveness */
+        @media (max-width: 768px) {
+            .section {
+                width: 100%;
+            }
+            .footer-left, .footer-right {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+        }
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>SacrisPeur Resources Hub</h1>
+        <div class="theme-switch-wrapper">
+            <label class="theme-switch" for="checkbox">
+                <input type="checkbox" id="checkbox" />
+                <div class="slider">
+                    <i class="fas fa-sun slider-icon sun"></i>
+                    <i class="fas fa-moon slider-icon moon"></i>
+                </div>
+            </label>
+        </div>
+    </header>
+      <main>
+        <div class="section" id="audioSection">
+            <h2>Audio Sermons</h2>
+            <p>Listen to inspiring sermons from various Christian leaders.</p>
+            <button onclick="showPopup('audio')" aria-label="Download Sermons">Download Sermons</button>
+        </div>
+        <div class="section">
+            <h2>Books Towards Development</h2>
+            <p>Access in-depth Pdf's study materials and guides.</p>
+            <button onclick="showPopup('pdf')" aria-label="Download PDFs">Download PDFs</button>
+        </div>
+        <div class="section">
+            <h2>Christian Artwork</h2>
+            <p>Browse and download beautiful Christian-themed images.</p>
+            <button onclick="showPopup('image')" aria-label="Download Images">Download Images</button>
+        </div>
+        <div class="section">
+            <h2>Video Teachings</h2>
+            <p>Watch video lessons on various Christian topics.</p>
+            <button onclick="showPopup('video')" aria-label="Download Videos">Download Videos</button>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-left">
+            <div class="footer-brand">SacrisPeur</div>
+            <div class="footer-slogan">Godliness + Contentment = A Great Gain</div>
+        </div>
+        <div class="footer-right">
+            <div class="social-icons">
+                <a href="https://wa.me/+2347049192165" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.tiktok.com/@sacrispeur?is_from_webapp=1&sender_device=pc" title="TikTok"><i class="fab fa-tiktok"></i></a>
+                <a href="https://web.facebook.com/profile.php?id=100004219935769" title="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.instagram.com/sacrispeur/" title="Instagram"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+    <div class="moving-text">
+        <p>Building Yourself for a Glorious Destiny</p>
+    </div>
+
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closePopup()">&times;</span>
+            <h2 id="popupTitle"></h2>
+            <p id="popupMessage"></p>
+            <div id="resourceList" class="resource-list"></div>
+        </div>
+    </div>
+
+    <script>
+        function showPopup(type) {
+            const popup = document.getElementById('popup');
+            const title = document.getElementById('popupTitle');
+            const message = document.getElementById('popupMessage');
+            const resourceList = document.getElementById('resourceList');
+
+            resourceList.innerHTML = '';
+
+            switch(type) {
+                case 'audio':
+                    title.textContent = 'Download Audio Sermons';
+                    message.textContent = 'Click on a sermon to download:';
+                    const sermons = [
+                        {title: 'Blessed With All Spiritual Blessings', url: 'https://drive.google.com/file/d/1EQwaKwOKvCDgBEjtl_5RlZPXqXCTuGHl/view?usp=drive_link'},
+                        {title: 'Desiring A New Weight Of Glory', url: 'https://drive.google.com/file/d/1SreYtevfp4YmCsoCtF9LiAm4SO4dNHBA/view?usp=drive_link'},
+                        {title: 'Disadvantaged By Un-Circumcision', url: 'https://drive.google.com/file/d/172ujwQU4jXp0l4dxDWagcRSDR2MPagy8/view?usp=drive_link'},
+                        {title: 'Discerning The Will Of God', url: 'https://drive.google.com/file/d/1RSorMrfbdr8u_mhhRf13eYTmuqCWv9u2/view?usp=drive_link'},
+                        {title: 'Fighting A Disadvantaged Foe', url: 'https://drive.google.com/file/d/19Mp-vsbeKazJ1hIYW1t0e3LbGV8B3Zbo/view?usp=drive_link'},
+                        {title: 'FRAGILE', url: 'https://drive.google.com/file/d/16JoItYNI9JOpQfzhFldOv_Bb796CjMvS/view?usp=drive_link'},
+                        {title: 'God Loves Me', url: 'https://drive.google.com/file/d/1TJ3KvR3bv8ikyMdiJxlyVEICW6idCFvL/view?usp=drive_link'},
+                        {title: 'GOD', url: 'https://drive.google.com/file/d/10vQYdKPxkMMaih7A07iHjHHlJTODLclg/view?usp=drive_link'},
+                        {title: 'Guidance and Watchers', url: 'https://drive.google.com/file/d/1RIBy9mvV9HPXLmpfy1iaKwSGPKhcKb5i/view?usp=drive_link'},
+                        {title: 'How Are The Mighty Fallen', url: 'https://drive.google.com/file/d/1R-mfKOn3FRCPDFXuBoTCwFPXC3hfJhER/view?usp=drive_link'},
+                        {title: 'In The Power Of The Spirit', url: 'https://drive.google.com/file/d/1-9ALGAsYBWExnC8TGzs0ub-p2jTzgVI6/view?usp=drive_link'},
+                        {title: 'Laying Aside Every Wieght', url: 'https://drive.google.com/file/d/1Dr35v58pDa8U07KSxCc_T-mfDdIuS9so/view?usp=drive_link'},
+                        {title: 'Let Them Have Dominion', url: 'https://drive.google.com/file/d/17VrywmJoewgoH-DiStUk0hGlm2iQpHyw/view?usp=drive_link'},
+                        {title: 'Mystery Of Sight', url: 'https://drive.google.com/file/d/1RPfPOI5ITjq2X5HuA5W8F0jiDyh9wzgr/view?usp=drive_link'},
+                        {title: 'Pathways To Ascension', url: 'https://drive.google.com/file/d/1RAlPzRWsLd8_56RCJnwfqmHZgOZVK1Kd/view?usp=drive_link'},
+                        {title: 'Power Things', url: 'https://drive.google.com/file/d/1D4NAt_74nje3Hk-V1ZWJSv6VmFl6W9rI/view?usp=drive_link'},
+                        {title: 'Rivers Of His Glory', url: 'https://drive.google.com/file/d/1SiNZCDw4wnCIUKvvbvAFpix5zc34wXRA/view?usp=drive_link'},
+                        {title: 'Season of the Seed', url: 'https://drive.google.com/file/d/1RTMKPQ_0ZlUFTL1fKd1bjY4XK2AnRFW0/view?usp=drive_link'}
+                        ];
+                    populateResourceList(sermons, downloadResource);
+                    break;
+                case 'pdf':
+                    title.textContent = 'Download PDFs';
+                    message.textContent = 'Click on a PDF to download:';
+                    const pdfs = [
+                        {title: 'Why Tonues', url: 'https://drive.google.com/open?id=1YUuBoIe5JmiFvaG6M-Sl5dgqERnIzFLr&usp=drive_copy'},
+                        {title: 'Consistency and Discipline', url: 'https://drive.google.com/open?id=1oEG5fbBgjQW9cQc1N6PWrosw_tKL5ucp&usp=drive_copy'},
+                        {title: 'Spiritual Man', url: 'https://drive.google.com/open?id=1Iit2yDCrL4M_gu-P85sE7VT-ltLU6UXT&usp=drive_copy'},
+                        {title: 'Dont Limit God', url: 'https://drive.google.com/open?id=1IfZr8mcdXcJdZNQtRZsSnCKvUuIRk-VZ&usp=drive_copy'},
+                        {title: 'God Can Do It Again', url: 'https://drive.google.com/open?id=1N-5zrmdk6G9L_Y6FgYRfvyvXupL8ZBWW&usp=drive_copy'},
+                        {title: 'God Loves You', url: 'https://drive.google.com/open?id=18n3HHOAPZUv0e6jdCo_4OH1x9OMDcJPm&usp=drive_copy'},
+                        {title: 'How To Turn Yor Faith Loose', url: 'https://drive.google.com/open?id=1IjIazDruhpn9mGEKRn0LVlz-M9zbGSCP&usp=drive_copy'},
+                        {title: 'How You Can Know The Will Of God', url: 'https://drive.google.com/open?id=1nin8_xPectzuFV7pvro3ujHfLHhKxZo8&usp=drive_copy'},
+                        {title: 'Hungry For More Of God', url: 'https://drive.google.com/open?id=1IqavyN-nyMsntz2sVw7q4WwyYRI4hxvv&usp=drive_copy'},
+                        {title: 'Immersed But Not Soaked', url: 'https://drive.google.com/open?id=1J0Tp2GC1RGpI8b9WtyZykwmc6kMDiV8V&usp=drive_copy'},
+                        {title: 'Knowing God By Name', url: 'https://drive.google.com/open?id=1IsDwGyX8TCwSxrQTAENiEHpkWEGqcCQs&usp=drive_copy'},
+                        {title: 'Law Of Prosperity', url: 'https://drive.google.com/open?id=1aPzcohOkIK5vGNq5j0bFlQhlXsvrxTWt&usp=drive_copy'},
+                        {title: 'Led By The Inward Witness', url: 'https://drive.google.com/open?id=1J4NDEGupXJfhuywrARaNpJ-YksInr38-&usp=drive_copy'},
+                        {title: 'Must Christin Suffer', url: 'https://drive.google.com/open?id=1JBUN5s3O4fhIcyXpiN89MKXd1uW3Fe_O&usp=drive_copy'},
+                        {title: 'Never To Late', url: 'https://drive.google.com/open?id=1NB9b-_56uSMkXinIGGrDYFXs0P8kciJK&usp=drive_copy'},
+                        {title: 'Share The ift In You', url: 'https://drive.google.com/open?id=1dt1vFQnyuiEoSm1-47wxcyYYn9jEeWhf&usp=drive_copy'},
+                        {title: 'Solving Family Crisis', url: 'https://drive.google.com/open?id=1r69VrnMr5BC5mS7U92eGIYGtuBHt6XsO&usp=drive_copy'},
+                        {title: 'The Devil Wants Your Mind', url: 'https://drive.google.com/open?id=1JLnhlBObCVqIY44e_4KcSm8RpveAcz9r&usp=drive_copy'},
+                        {title: 'The Explit Of Faith', url: 'https://drive.google.com/open?id=1JPyswEkf5od_fsuTqY446ETnu-Z1iF90&usp=drive_copy'},
+                        {title: 'What Faith Is', url: 'https://drive.google.com/open?id=1JYTY0Cm8sjCJihADSYHIz31TUqlUtrHT&usp=drive_copy'}
+                    ];
+                    populateResourceList(pdfs, downloadResource);
+                    break;
+                case 'image':
+                    title.textContent = 'Download Christian Artwork';
+                    message.textContent = 'Click on an image to download:';
+                    const images = [
+                        {title: 'Artwork 1', url: 'https://drive.google.com/open?id=1VWYbdB0sCS2EWmLL6Dm46oQx0BNB3bzR&usp=drive_copy'},
+{title: 'Artwork 2', url: 'https://drive.google.com/open?id=1pX5nmiO0lgY2OQq8wPbvVRTlfG596Evx&usp=drive_copy'},
+{title: 'Artwork 3', url: 'https://drive.google.com/open?id=1k-tUKMcP_TYBN_k9iZV8EBtoyw7iVmh4&usp=drive_copy'},
+{title: 'Artwork 4', url: 'https://drive.google.com/open?id=1H_ymE-WVH_2t00q6ctzwBqSsXaIW-bnu&usp=drive_copy'},
+{title: 'Artwork 5', url: 'https://drive.google.com/open?id=1mOLcVuMlqqKX9Ys1bpGMOtXvfDPqYoUI&usp=drive_copy'},
+{title: 'Artwork 6', url: 'https://drive.google.com/open?id=1YGpnZUUuQlW7k6u4CnE1GGzi5Jcli9WJ&usp=drive_copy'},
+{title: 'Artwork 7', url: 'https://drive.google.com/open?id=1GJ1_l44sjxSuHZEUAi_MuAw1z5-4AoCH&usp=drive_copy'},
+{title: 'Artwork 8', url: 'https://drive.google.com/open?id=1VVkzWHthkJ8JjviFDd9pUvrrI8-KoqNR&usp=drive_copy'},
+{title: 'Artwork 9', url: 'https://drive.google.com/open?id=1fIAqCvkUMJgdHbmd6GczSN525Cp_iOOd&usp=drive_copy'},
+{title: 'Artwork 10', url: 'https://drive.google.com/open?id=1DENqFrGOVvD3loJLtmKh4f8n1OaJr_f9&usp=drive_copy'},
+{title: 'Artwork 11', url: 'https://drive.google.com/open?id=1-Emz_A3B1oBzLJYhC86DrRAju5QqkoKm&usp=drive_copy'},
+{title: 'Artwork 12', url: 'https://drive.google.com/open?id=1zGWrtXLikgOsqkb1J_XAWZLU_gDFuhd_&usp=drive_copy'},
+{title: 'Artwork 13', url: 'https://drive.google.com/open?id=137XNceAnwEIy1ENZUc7kVsteCI_LjukP&usp=drive_copy'},
+{title: 'Artwork 14', url: 'https://drive.google.com/open?id=1BVLIPj6hvxFaDYfHtr8hVkiywXvKWpRv&usp=drive_copy'},
+{title: 'Artwork 15', url: 'https://drive.google.com/open?id=1nLa-ub3EToTXoEY_2w62xQo5XxGQbQK0&usp=drive_copy'},
+{title: 'Artwork 16', url: 'https://drive.google.com/open?id=1wdWWMVQPSHjCWMg2EyR4tUe1MJ8biNtk&usp=drive_copy'},
+{title: 'Artwork 17', url: 'https://drive.google.com/open?id=1AckVHyG6PsixS-YnTYgCQyEp3OBzILpj&usp=drive_copy'},
+{title: 'Artwork 18', url: 'https://drive.google.com/open?id=1KysycheOhhX8aqYR9aIdqAAJcHVDy5bc&usp=drive_copy'},
+{title: 'Artwork 19', url: 'https://drive.google.com/open?id=17wRMpYOO3zNiEd9Qnp3yyFgB7x4BOs-e&usp=drive_copy'},
+{title: 'Artwork 20', url: 'https://drive.google.com/open?id=1SRc8A3bzXpQPTUzkGA6q6zfoKhFQFFfx&usp=drive_copy'},
+{title: 'Artwork 21', url: 'https://drive.google.com/open?id=1vOxVcpIpuP_n9PsjXmFH80K8fz9F73jf&usp=drive_copy'},
+{title: 'Artwork 22', url: 'https://drive.google.com/open?id=1fGLwqq5gkGEAGsQC-Biq4No52MuN0Ky1&usp=drive_copy'},
+{title: 'Artwork 23', url: 'https://drive.google.com/open?id=10eY0Vq7wg5YbkBB-O2npxbZsvA_yQ8le&usp=drive_copy'},
+{title: 'Artwork 24', url: 'https://drive.google.com/open?id=1QWESYOidA9jBGjqGsgySWnjCJ5sWBk-8&usp=drive_copy'},
+{title: 'Artwork 25', url: 'https://drive.google.com/open?id=1nUTy6aVlERbA8Gw9Cl9bBqhNKNPcCQzm&usp=drive_copy'},
+{title: 'Artwork 26', url: 'https://drive.google.com/open?id=1pX-3sTbNQwQl2tGY_M_9sBRVVi2hXAc5&usp=drive_copy'},
+{title: 'Artwork 27', url: 'https://drive.google.com/open?id=13jOS-uIMRIwZYi1nNbXwekWNQ8YkwOZk&usp=drive_copy'},
+{title: 'Artwork 28', url: 'https://drive.google.com/open?id=1ejlgfVbMikvhsnni1JNsLGE3JBBNhkrQ&usp=drive_copy'},
+{title: 'Artwork 29', url: 'https://drive.google.com/open?id=1u9x2iM5rv9ANeqydK3IcpQmE7ebnJ43a&usp=drive_copy'},
+{title: 'Artwork 30', url: 'https://drive.google.com/open?id=178N8C4C7qf6tRWHB2Tk946duBHLUAtwW&usp=drive_copy'},
+{title: 'Artwork 31', url: 'https://drive.google.com/open?id=1mmqNRI5uPx1kTUvw-6-7tkr7hhwNSgwB&usp=drive_copy'},
+{title: 'Artwork 32', url: 'https://drive.google.com/open?id=1G_ihiodC8lem-icAEQHZAigarYAL0srN&usp=drive_copy'},
+                    ];
+                    populateResourceList(images, downloadResource);
+                    break;
+                case 'video':
+                    title.textContent = 'Download Video Teachings';
+                    message.textContent = 'Click on a video to download:';
+                    const videos = [
+                        {title: 'Coming Soon', url: '#'},
+                        {title: 'Coming Soon', url: '#'},
+                        {title: 'Coming Soon', url: '#'},
+                        {title: 'Coming Soon', url: '#'},
+                        {title: 'Coming Soon', url: '#'},
+                        {title: 'Coming Soon', url: '#'},
+                        {title: 'Coming Soon', url: '#'},
+                        {title: 'Coming Soon', url: '#'},
+                        {title: 'Coming Soon', url: '#'},
+                        {title: 'Coming Soon', url: '#'},
+                        {title: 'Coming Soon', url: '#'},
+                        {title: 'Coming Soon', url: '#'},
+                        {title: 'Coming Soon', url: '#'},
+                        {title: 'Coming Soon', url: '#'},
+                        {title: 'Coming Soon', url: '#'},
+                        {title: 'Coming Soon', url: '#'},
+                        {title: 'Coming Soon', url: '#'},
+                        {title: 'Coming Soon', url: '#'},
+                        {title: 'Coming Soon', url: '#'},
+                        {title: 'Coming Soon', url: '#'},
+                    ];
+                    populateResourceList(videos, downloadResource);
+                    break;
+            }
+
+            popup.style.display = 'flex';
+        }
+
+        function populateResourceList(resources, downloadFunction) {
+            const resourceList = document.getElementById('resourceList');
+            resources.forEach(resource => {
+                const button = document.createElement('button');
+                button.textContent = resource.title;
+                button.onclick = () => downloadFunction(resource.url, button);
+                const favoriteBtn = document.createElement('button');
+                favoriteBtn.innerHTML = '<i class="fas fa-star"></i>';
+                favoriteBtn.className = 'favorite-btn';
+                favoriteBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    toggleFavorite(resource);
+                };
+                button.appendChild(favoriteBtn);
+                resourceList.appendChild(button);
+            });
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        function downloadResource(url, button) {
+            button.innerHTML = '<span class="loading"></span> Downloading...';
+            setTimeout(() => {
+                button.innerHTML = 'Downloaded!';
+                alert("Resource downloaded from: " + url);
+            }, 2000);
+        }
+
+        function toggleFavorite(resource) {
+            // Implement favorite toggling logic here
+            console.log('Toggled favorite for:', resource.title);
+        }
+
+        const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+        const currentTheme = localStorage.getItem('theme');
+
+        if (currentTheme) {
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            if (currentTheme === 'dark') {
+                toggleSwitch.checked = true;
+            }
+        }
+
+        function switchTheme(e) {
+            if (e.target.checked) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            }    
+        }
+
+        toggleSwitch.addEventListener('change', switchTheme, false);
+
+        // Search functionality
+        const searchInput = document.getElementById('search-input');
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const resources = document.querySelectorAll('.section');
+            resources.forEach(resource => {
+                const text = resource.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    resource.style.display = 'block';
+                } else {
+                    resource.style.display = 'none';
+                }
+            });
+        });
+
+        // Lazy loading images (add this to your image elements)
+        // <img src="placeholder.jpg" data-src="actual-image.jpg" class="lazy-image" alt="Description">
+        document.addEventListener("DOMContentLoaded", function() {
+            let lazyImages = [].slice.call(document.querySelectorAll("img.lazy-image"));
+            let active = false;
+
+            const lazyLoad = function() {
+                if (active === false) {
+                    active = true;
+
+                    setTimeout(function() {
+                        lazyImages.forEach(function(lazyImage) {
+                            if ((lazyImage.getBoundingClientRect().top <= window.innerHeight && lazyImage.getBoundingClientRect().bottom >= 0) && getComputedStyle(lazyImage).display !== "none") {
+                                lazyImage.src = lazyImage.dataset.src;
+                                lazyImage.classList.remove("lazy-image");
+
+                                lazyImages = lazyImages.filter(function(image) {
+                                    return image !== lazyImage;
+                                });
+
+                                if (lazyImages.length === 0) {
+                                    document.removeEventListener("scroll", lazyLoad);
+                                    window.removeEventListener("resize", lazyLoad);
+                                    window.removeEventListener("orientationchange", lazyLoad);
+                                }
+                            }
+                        });
+
+                        active = false;
+                    }, 200);
+                }
+            };
+
+            document.addEventListener("scroll", lazyLoad);
+            window.addEventListener("resize", lazyLoad);
+            window.addEventListener("orientationchange", lazyLoad);
+        });
+    </script>
+</body>
+</html>
